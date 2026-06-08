@@ -96,7 +96,8 @@ def autobatch(
         batch_sizes = [b for b in batch_sizes if b <= dataset_size]
     ch = model.yaml.get("channels", 3)
     try:
-        img = [torch.empty(b, ch, imgsz, imgsz) for b in batch_sizes]
+        imgsz = imgsz if isinstance(imgsz, (list, tuple)) else (imgsz, imgsz)
+        img = [torch.empty(b, ch, *imgsz) for b in batch_sizes]
         results = profile_ops(img, model, n=1, device=device, max_num_obj=max_num_obj)
 
         # Fit a solution
