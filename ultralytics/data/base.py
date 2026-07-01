@@ -401,8 +401,7 @@ class BaseDataset(Dataset):
                 shapes[i] = [1, 1 / mini]
 
         self.batch_shapes = (
-            np.ceil(np.array(shapes) * np.array(self._imgsz_hw()) / self.stride + self.pad).astype(int)
-            * self.stride
+            np.ceil(np.array(shapes) * np.array(self._imgsz_hw()) / self.stride + self.pad).astype(int) * self.stride
         )
         self.batch = bi  # batch index of image
 
