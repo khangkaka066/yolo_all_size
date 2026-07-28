@@ -463,9 +463,7 @@ class Mosaic(BaseMixTransform):
         assert n in {4, 9}, "grid must be equal to 4 or 9."
         super().__init__(dataset=dataset, p=p)
         self.imgsz = tuple(imgsz) if isinstance(imgsz, (list, tuple)) else imgsz
-        self.imgsz_h, self.imgsz_w = (
-            self.imgsz if isinstance(self.imgsz, tuple) else (self.imgsz, self.imgsz)
-        )
+        self.imgsz_h, self.imgsz_w = self.imgsz if isinstance(self.imgsz, tuple) else (self.imgsz, self.imgsz)
         self.border = (-self.imgsz_w // 2, -self.imgsz_h // 2)  # width, height
         self.n = n
         self.buffer_enabled = self.dataset.cache != "ram"
@@ -2601,7 +2599,7 @@ class RandomLoadText(BaseTransform):
         neg_samples: tuple[int, int] = (80, 80),
         max_samples: int = 80,
         padding: bool = False,
-        padding_value: list[str] = [""],
+        padding_value: list[str] | None = None,
     ) -> None:
         """Initialize the RandomLoadText class for randomly sampling positive and negative texts.
 
@@ -2618,6 +2616,8 @@ class RandomLoadText(BaseTransform):
                 max_samples.
             padding_value (list[str]): The padding text to use when padding is True.
         """
+        if padding_value is None:
+            padding_value = [""]
         self.prompt_format = prompt_format
         self.neg_samples = neg_samples
         self.max_samples = max_samples
